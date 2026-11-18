@@ -1,0 +1,25 @@
+
+/* E-OFFICE full workflow modules */
+.eo-admin-nav{margin-top:10px}
+.eo-module-view{display:none}
+.eo-module-view.active{display:block}
+.eo-actions,.eo-module-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.eo-module-toolbar{margin:18px 0;padding:14px;background:#fff;border:1px solid #e7ebf0;border-radius:14px}
+.eo-module-toolbar input{flex:1;min-width:220px;padding:11px 13px;border:1px solid #d8e0e8;border-radius:9px;font:inherit}
+.eo-data-table{width:100%;border-collapse:collapse;min-width:720px}
+.eo-data-table th,.eo-data-table td{padding:12px 14px;border-bottom:1px solid #edf0f4;text-align:left;vertical-align:top;font-size:13px}
+.eo-data-table th{background:#f7f9fb;color:#5a6878;font-weight:700;white-space:nowrap}
+.eo-row-actions{white-space:nowrap}
+.eo-row-actions .danger{color:#b42318}
+.eo-security-note{font-size:12px;color:#7a8795;margin-top:12px}
+.eo-dialog{width:min(680px,calc(100% - 24px));max-height:88vh;border:0;border-radius:18px;padding:0;box-shadow:0 24px 80px #10243a33}
+.eo-dialog::backdrop{background:#07162688;backdrop-filter:blur(3px)}
+.eo-dialog form{padding:22px}
+.eo-dialog-head,.eo-dialog-actions{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.eo-dialog-head h2{font-size:20px;margin:0 0 18px}
+.eo-dialog-actions{justify-content:flex-end;margin-top:20px}
+.eo-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.eo-fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#475467}
+.eo-fields input,.eo-fields select,.eo-fields textarea{width:100%;box-sizing:border-box;padding:10px 11px;border:1px solid #d0d8e2;border-radius:9px;font:inherit;color:#182536;background:#fff}
+.eo-fields label:has(textarea){grid-column:1/-1}
+@media(max-width:640px){.eo-fields{grid-template-columns:1fr}.eo-module-toolbar{align-items:stretch}.eo-module-toolbar input{min-width:100%}.eo-actions{width:100%}.eo-actions button{flex:1}}

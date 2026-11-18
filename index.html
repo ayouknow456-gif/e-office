@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10243a">
+  <meta name="description" content="E-Office document workspace">
+  <title>E-Office | ระบบจัดทำเอกสารราชการ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/connection.css">
+  <link rel="stylesheet" href="assets/css/admin.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script defer src="assets/js/connector.js"></script>
+  <script defer src="assets/js/storage.js"></script>
+  <script defer src="assets/js/editor.js"></script>
+  <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/admin.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><span>ส</span></div>
+        <div><strong>E-OFFICE</strong><small>DOCUMENT WORKSPACE</small></div>
+      </div>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="เมนูหลัก">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span><span>ภาพรวมระบบ</span></button>
+        <button class="nav-item" data-view="documents"><span class="nav-icon">▤</span><span>เอกสารของฉัน</span><span class="nav-count" id="docCount">0</span></button>
+        <button class="nav-item" data-view="editor"><span class="nav-icon">✎</span><span>จัดทำหนังสือ</span></button>
+        <button class="nav-item" data-view="inbox"><span class="nav-icon">↙</span><span>หนังสือเข้า</span></button>
+        <button class="nav-item" data-view="outbox"><span class="nav-icon">↗</span><span>หนังสือส่ง</span></button>
+        <button class="nav-item" data-view="archive"><span class="nav-icon">▣</span><span>คลังเอกสาร</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="storage-card">
+          <div class="storage-top"><span>พื้นที่จัดเก็บ</span><span class="tiny-dot"></span></div>
+          <strong>โหมดทดลองบนอุปกรณ์</strong>
+          <p>ข้อมูลในชุดหน้าเว็บนี้บันทึกในเบราว์เซอร์เครื่องนี้</p>
+        </div>
+        <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span><span>ตั้งค่าหน่วยงาน</span></button>
+        <div class="user-chip">
+          <div class="avatar" id="userAvatar">ผ</div>
+          <div class="user-meta"><strong id="sidebarUser">ผู้ปฏิบัติงาน</strong><small id="sidebarOrg">หน่วยงานของฉัน</small></div>
+          <span class="more">•••</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-menu" id="mobileMenu" aria-label="เปิดเมนู">☰</button>
+          <div class="breadcrumb"><span>พื้นที่ทำงาน</span><b>/</b><strong id="breadcrumbCurrent">ภาพรวมระบบ</strong></div>
+        </div>
+        <div class="topbar-right">
+          <span class="system-status"><i></i> ระบบหน้าเว็บพร้อมใช้งาน</span>
+          <div class="top-date" id="todayLabel"></div>
+          <button class="avatar avatar-small" id="topAvatar" title="โปรไฟล์">ผ</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="page-heading">
+          <div><span class="eyebrow">OVERVIEW</span><h1>ภาพรวมระบบ</h1><p>พื้นที่จัดการหนังสือและเอกสารของหน่วยงาน</p></div>
+          <button class="primary-button" id="newDocDashboard">＋ สร้างหนังสือใหม่</button>
+        </div>
+        <div class="welcome-banner">
+          <div><span class="banner-kicker">DOCUMENT OPERATIONS</span><h2>จัดทำเอกสารอย่างเป็นระบบ<br>พร้อมควบคุมรูปแบบก่อนพิมพ์</h2><p>เริ่มร่างหนังสือ เลือกแบบเอกสาร และตรวจดูหน้า A4 ก่อนส่งออก</p></div>
+          <div class="banner-orbit"><div class="orbit-ring"></div><div class="orbit-paper">ก<br><small>ราชการ</small></div></div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-symbol blue">▤</div><span>เอกสารทั้งหมด</span><strong id="statTotal">0</strong><small>เอกสารที่บันทึกในอุปกรณ์นี้</small></article>
+          <article class="stat-card"><div class="stat-symbol amber">◷</div><span>ฉบับร่าง</span><strong id="statDraft">0</strong><small>รายการที่ยังแก้ไขได้</small></article>
+          <article class="stat-card"><div class="stat-symbol green">✓</div><span>พร้อมดำเนินการ</span><strong id="statReady">0</strong><small>สถานะบันทึกแล้ว</small></article>
+          <article class="stat-card"><div class="stat-symbol violet">▣</div><span>คลังเอกสาร</span><strong id="statArchive">0</strong><small>รายการที่เก็บไว้</small></article>
+        </div>
+        <div class="content-card recent-card">
+          <div class="card-heading"><div><h3>เอกสารล่าสุด</h3><p>รายการที่คุณสร้างหรือแก้ไขล่าสุด</p></div><button class="text-button" data-goto="documents">ดูเอกสารทั้งหมด →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>ชื่อเรื่อง</th><th>ประเภท</th><th>วันที่แก้ไข</th><th>สถานะ</th><th></th></tr></thead><tbody id="recentRows"><tr><td colspan="5" class="empty-cell">ยังไม่มีเอกสาร เริ่มสร้างหนังสือฉบับแรกของคุณ</td></tr></tbody></table></div>
+        </div>
+        <div class="note-strip"><span>i</span><div><strong>หมายเหตุการพิมพ์</strong><p>รูปแบบเอกสารเป็นแม่แบบช่วยจัดหน้า ต้องตรวจทานเนื้อหา เลขที่หนังสือ คำขึ้นต้น คำลงท้าย และรูปแบบเฉพาะของหน่วยงานก่อนนำไปใช้จริง</p></div></div>
+      </section>
+
+      <section class="view" id="view-documents">
+        <div class="page-heading"><div><span class="eyebrow">MY DOCUMENTS</span><h1>เอกสารของฉัน</h1><p>ค้นหา เปิดแก้ไข และจัดการเอกสารที่บันทึกไว้</p></div><button class="primary-button" id="newDocList">＋ สร้างหนังสือใหม่</button></div>
+        <div class="content-card">
+          <div class="list-toolbar"><div class="search-box"><span>⌕</span><input id="documentSearch" type="search" placeholder="ค้นหาชื่อเรื่องหรือเลขที่หนังสือ"></div><select id="documentFilter" class="select-control"><option value="all">ทุกประเภท</option><option value="external">หนังสือภายนอก</option><option value="memo">บันทึกข้อความ</option><option value="announcement">ประกาศ</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>ชื่อเรื่อง / เลขที่</th><th>รูปแบบหนังสือ</th><th>วันที่แก้ไข</th><th>สถานะ</th><th>การดำเนินการ</th></tr></thead><tbody id="documentRows"><tr><td colspan="5" class="empty-cell">ยังไม่มีเอกสารที่บันทึก</td></tr></tbody></table></div>
+        </div>
+      </section>
+
+      <section class="view editor-view" id="view-editor">
+        <input type="hidden" id="docId" value=""><div class="editor-heading">
+          <div><span class="eyebrow">DOCUMENT COMPOSER</span><h1>จัดทำหนังสือราชการ</h1><p>ออกแบบหน้าเอกสาร A4 และตรวจผลก่อนพิมพ์</p></div>
+          <div class="editor-actions"><button class="secondary-button" id="saveDraftTop">บันทึกฉบับร่าง</button><button class="secondary-button" id="openPreview">ดูตัวอย่าง</button><button class="primary-button" id="printDoc">PDF / พิมพ์</button></div>
+        </div>
+        <div class="composer-shell">
+          <div class="composer-toolbar">
+            <div class="toolbar-group template-group"><label for="templateSelect">รูปแบบ</label><select id="templateSelect"><option value="external">หนังสือภายนอก</option><option value="memo">บันทึกข้อความ</option><option value="announcement">ประกาศ</option></select></div>
+            <span class="toolbar-divider"></span>
+            <div class="toolbar-group"><button class="tool-btn" data-command="bold" title="ตัวหนา"><b>B</b></button><button class="tool-btn italic-tool" data-command="italic" title="ตัวเอียง">I</button><button class="tool-btn underline-tool" data-command="underline" title="ขีดเส้นใต้">U</button></div>
+            <span class="toolbar-divider"></span>
+            <div class="toolbar-group"><select id="fontSelect" aria-label="แบบอักษร"><option value="TH Sarabun PSK">TH Sarabun PSK</option><option value="TH Sarabun New">TH Sarabun New</option><option value="Sarabun">Sarabun</option></select><select id="fontSizeSelect" aria-label="ขนาดอักษร"><option>14</option><option selected>16</option><option>18</option><option>20</option><option>22</option><option>24</option><option>26</option><option>28</option><option>32</option></select><span class="pt-label">pt</span></div>
+            <span class="toolbar-divider"></span>
+            <div class="toolbar-group"><button class="tool-btn" data-command="justifyLeft" title="ชิดซ้าย">≡</button><button class="tool-btn" data-command="justifyCenter" title="กึ่งกลาง">☰</button><button class="tool-btn" data-command="justifyRight" title="ชิดขว">≡</button><button class="tool-btn" data-command="justifyFull" title="เต็มบรรทัด">▤</button></div>
+            <span class="toolbar-divider"></span>
+            <div class="toolbar-group"><button class="tool-btn" id="indentBtn" title="เพิ่มย่อหน้า">⇥</button><button class="tool-btn" id="outdentBtn" title="ลดย่อหน้า">⇤</button><button class="tool-btn" id="undoBtn" title="ย้อนกลับ">↶</button><button class="tool-btn" id="redoBtn" title="ทำซ้ำ">↷</button></div>
+          </div>
+          <div class="composer-workspace">
+            <aside class="properties-panel">
+              <div class="panel-title"><strong>รายละเอียดหนังสือ</strong><span class="panel-step">01</span></div>
+              <label class="field-label" for="docSubject">เรื่อง</label><input class="field-control" id="docSubject" placeholder="ระบุชื่อเรื่องหนังสือ">
+              <label class="field-label" for="docNumber">เลขที่หนังสือ</label><input class="field-control" id="docNumber" placeholder="เช่น กค ๐๐๑/...">
+              <label class="field-label" for="docDate">วันที่</label><input class="field-control" id="docDate" placeholder="เช่น ๑๘ พฤศจิกายน ๒๕๖๙">
+              <label class="field-label" for="docTo">เรียน / ถึง</label><input class="field-control" id="docTo" placeholder="ระบุผู้รับหนังสือ">
+              <div id="externalFields"><label class="field-label" for="docReference">อ้างถึง (ถ้ามี)</label><input class="field-control" id="docReference" placeholder="หนังสือที่อ้างถึง"><label class="field-label" for="docAttachment">สิ่งที่ส่งมาด้วย (ถ้ามี)</label><input class="field-control" id="docAttachment" placeholder="รายการสิ่งที่ส่งมาด้วย"></div>
+              <div class="field-divider"></div>
+              <label class="field-label" for="docSigner">ชื่อผู้ลงนาม</label><input class="field-control" id="docSigner" placeholder="ชื่อ - นามสกุล">
+              <label class="field-label" for="docPosition">ตำแหน่ง</label><input class="field-control" id="docPosition" placeholder="ตำแหน่งผู้ลงนาม">
+              <label class="field-label" for="docPhone">โทรศัพท์</label><input class="field-control" id="docPhone" placeholder="หมายเลขโทรศัพท์">
+              <div class="panel-tip"><span>✦</span><p>ค่าตั้งต้นจัดหน้าให้ตามแม่แบบ แต่สามารถปรับข้อความและรูปแบบได้จากแถบเครื่องมือ</p></div>
+            </aside>
+
+            <section class="paper-workspace" aria-label="พื้นที่แก้ไขเอกสาร">
+              <div class="paper-workspace-top"><span><i></i> DOCUMENT PREVIEW</span><div><button id="zoomOut" class="zoom-btn">−</button><span id="zoomLabel">100%</span><button id="zoomIn" class="zoom-btn">＋</button></div></div>
+              <div class="paper-stage" id="paperStage">
+                <article class="paper external" id="paper" contenteditable="false" spellcheck="false">
+                  <div class="paper-garuda-wrap" id="paperGarudaWrap"><img id="paperGaruda" alt="ตราครุฑ" hidden><div class="garuda-placeholder">พื้นที่ตราครุฑ</div></div>
+                  <div class="paper-seal-wrap" id="paperSealWrap"><img id="paperSeal" alt="ตราหน่วยงาน" hidden></div>
+                  <div class="paper-topline" id="paperTopline"><span id="renderDocNumber">ที่ ................................</span><span id="renderOrg">ส่วนราชการเจ้าของหนังสือ</span></div>
+                  <div class="paper-date" id="renderDate">วันที่ ................................</div>
+                  <div class="paper-meta"><p><b>เรื่อง</b> <span id="renderSubject">เรื่องของหนังสือ</span></p><p><b id="toLabel">เรียน</b> <span id="renderTo">ผู้รับหนังสือ</span></p><p id="referenceLine"><b>อ้างถึง</b> <span id="renderReference">-</span></p><p id="attachmentLine"><b>สิ่งที่ส่งมาด้วย</b> <span id="renderAttachment">-</span></p></div>
+                  <div class="document-body" id="documentBody" contenteditable="true"><p>ด้วยหน่วยงานมีความประสงค์จะ........................................................................................................................</p><p>ในการนี้ จึงเรียนมาเพื่อโปรดพิจารณาดำเนินการในส่วนที่เกี่ยวข้องต่อไป</p></div>
+                  <div class="paper-ending" id="paperEnding">ขอแสดงความนับถือ</div>
+                  <div class="signature-block"><div class="signature-space"></div><div id="renderSigner">(ชื่อ - นามสกุล)</div><div id="renderPosition">ตำแหน่ง</div></div>
+                  <div class="paper-footer" id="paperFooter"><span id="renderPhone">โทร. ................................</span><span id="renderEmail"></span></div>
+                </article>
+              </div>
+              <div class="paper-workspace-bottom"><span>ขนาดกระดาษ A4 · 210 × 297 มม.</span><span id="formatStatus">TH Sarabun PSK · 16 pt · ระยะบรรทัด 1 เท่า</span></div>
+            </section>
+
+            <aside class="quick-panel">
+              <div class="panel-title"><strong>จัดหน้าเอกสาร</strong><span class="panel-step">02</span></div>
+              <div class="quick-section"><span class="quick-label">ระยะบรรทัด</span><select class="field-control" id="lineSpacing"><option value="1">1 เท่า (Single)</option><option value="1.15">1.15 เท่า</option><option value="1.5">1.5 เท่า</option></select></div>
+              <div class="quick-section"><span class="quick-label">ย่อหน้าแรก</span><select class="field-control" id="firstIndent"><option value="2.5">2.5 ซม. (มาตรฐานตัวอย่าง)</option><option value="0">ไม่เยื้อง</option><option value="1.25">1.25 ซม.</option></select></div>
+              <div class="quick-section"><span class="quick-label">ตราประจำเอกสาร</span><div id="garudaPicker" class="mini-choice"><span>ยังไม่ได้อัปโหลดตราครุฑ</span><button data-goto="settings">ตั้งค่า</button></div></div>
+              <div class="quick-section"><span class="quick-label">ตราหน่วยงาน</span><div id="sealPicker" class="mini-choice"><span>ยังไม่ได้อัปโหลดตราหน่วยงาน</span><button data-goto="settings">ตั้งค่า</button></div></div>
+              <div class="quick-action"><button class="wide-button" id="exportPng">⇩ บันทึกเป็นภาพ PNG</button><button class="wide-button muted" id="saveDraftSide">บันทึกฉบับร่าง</button></div>
+              <p class="privacy-hint">ข้อมูลฉบับนี้ยังอยู่ในเบราว์เซอร์เครื่องนี้ จนกว่าจะเชื่อมต่อฐานข้อมูลกลาง</p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-inbox"><div class="page-heading"><div><span class="eyebrow">INCOMING</span><h1>หนังสือเข้า</h1><p>พื้นที่เตรียมเชื่อมต่อกล่องหนังสือเข้าจาก GAS</p></div></div><div class="content-card empty-module"><div class="empty-icon">↙</div><h3>ยังไม่ได้เชื่อมต่อกล่องหนังสือเข้า</h3><p>เมื่อเชื่อม API กับ Google Apps Script แล้ว รายการหนังสือที่ส่งถึงคุณจะแสดงในหน้านี้</p></div></section>
+      <section class="view" id="view-outbox"><div class="page-heading"><div><span class="eyebrow">OUTGOING</span><h1>หนังสือส่ง</h1><p>ติดตามเอกสารที่ดำเนินการส่งออก</p></div></div><div class="content-card empty-module"><div class="empty-icon">↗</div><h3>ยังไม่ได้เชื่อมต่อทะเบียนหนังสือส่ง</h3><p>หน้าจอนี้เตรียมไว้สำหรับเชื่อมต่อโมดูลทะเบียนหนังสือส่ง</p></div></section>
+      <section class="view" id="view-archive"><div class="page-heading"><div><span class="eyebrow">ARCHIVE</span><h1>คลังเอกสาร</h1><p>เอกสารที่จัดเก็บไว้เพื่อค้นคืน</p></div></div><div class="content-card"><div class="table-wrap"><table><thead><tr><th>ชื่อเรื่อง</th><th>ประเภท</th><th>วันที่</th><th>การดำเนินการ</th></tr></thead><tbody id="archiveRows"><tr><td colspan="4" class="empty-cell">ยังไม่มีเอกสารในคลัง</td></tr></tbody></table></div></div></section>
+
+      <section class="view" id="view-settings">
+        <div class="page-heading"><div><span class="eyebrow">ORGANIZATION SETTINGS</span><h1>ตั้งค่าหน่วยงานและโปรไฟล์</h1><p>ข้อมูลส่วนราชการและตราที่ใช้แสดงบนเอกสาร</p></div><button class="primary-button" id="saveSettings">บันทึกการตั้งค่า</button></div>
+        <div class="settings-grid">
+          <div class="content-card settings-card connection-card"><div class="card-heading"><div><h3>เชื่อมต่อฐานข้อมูล Google Sheets</h3><p>กำหนด URL ของ GAS Web App เพื่อใช้ฐานข้อมูลกลางร่วมกัน</p></div><span class="settings-icon">⇄</span></div>
+            <label class="field-label" for="gasUrl">GAS Web App URL</label><input class="field-control" id="gasUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec">
+            <label class="field-label" for="gasApiKey">รหัสเชื่อมต่อ API (ถ้ากำหนดไว้ใน GAS)</label><input class="field-control" id="gasApiKey" type="password" autocomplete="off" placeholder="API key">
+            <div class="connection-actions"><button class="secondary-button" id="testConnection">ทดสอบการเชื่อมต่อ</button><span id="connectionStatus" class="connection-status">ยังไม่ได้เชื่อมต่อ</span></div>
+            <p class="small-help">ข้อมูลเอกสารและภาพตราจะบันทึกใน Google Sheets เท่านั้น ไม่ใช้ Google Drive โหมดเชื่อมต่อใช้ JSONP สำหรับการเรียก GAS จาก GitHub Pages</p>
+          </div>
+          <div class="content-card settings-card"><div class="card-heading"><div><h3>ข้อมูลหน่วยงาน</h3><p>ใช้เป็นข้อมูลส่วนหัวและท้ายหนังสือ</p></div><span class="settings-icon">▤</span></div>
+            <label class="field-label" for="orgName">ชื่อหน่วยงาน / ส่วนราชการ</label><input class="field-control" id="orgName" placeholder="ชื่อส่วนราชการเจ้าของหนังสือ">
+            <label class="field-label" for="orgAddress">ที่อยู่หน่วยงาน</label><textarea class="field-control textarea-control" id="orgAddress" rows="3" placeholder="เลขที่ ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์"></textarea>
+            <div class="two-fields"><div><label class="field-label" for="orgPhone">โทรศัพท์</label><input class="field-control" id="orgPhone" placeholder="หมายเลขโทรศัพท์"></div><div><label class="field-label" for="orgEmail">อีเมล</label><input class="field-control" id="orgEmail" type="email" placeholder="อีเมลหน่วยงาน"></div></div>
+            <label class="field-label" for="profileName">ชื่อผู้ใช้งาน / ผู้จัดทำ</label><input class="field-control" id="profileName" placeholder="ชื่อผู้ใช้งาน">
+          </div>
+          <div class="content-card settings-card"><div class="card-heading"><div><h3>ตราประจำหน่วยงาน</h3><p>อัปโหลดได้สูงสุด 3 ภาพ รองรับ PNG, JPG และ WebP</p></div><span class="settings-icon">◉</span></div>
+            <div class="upload-drop" id="sealDrop"><div class="upload-symbol">＋</div><strong>เพิ่มตราหน่วยงาน</strong><span>เลือกภาพจากอุปกรณ์ · สูงสุด 3 ภาพ</span><input type="file" id="sealUpload" accept="image/png,image/jpeg,image/webp" multiple hidden><button class="secondary-button" id="chooseSeal">เลือกไฟล์ภาพ</button></div>
+            <div class="asset-grid" id="sealAssets"></div>
+            <div class="upload-note"><b>พื้นหลังของภาพ</b><p>ระบบคงสภาพไฟล์ต้นฉบับ หากภาพ PNG หรือ WebP มีพื้นหลังโปร่งใสก็จะแสดงโปร่งใสตามต้นฉบับ หากภาพมีพื้นหลังสีขาวหรือสีอื่น ระบบจะไม่ลบพื้นหลังอัตโนมัติ</p></div>
+          </div>
+          <div class="content-card settings-card garuda-settings"><div class="card-heading"><div><h3>ตราครุฑ</h3><p>อัปโหลดได้สูงสุด 4 ภาพ แยกเลือกใช้ตามแบบหนังสือ</p></div><span class="settings-icon">♜</span></div>
+            <div class="upload-drop" id="garudaDrop"><div class="upload-symbol">＋</div><strong>เพิ่มภาพตราครุฑ</strong><span>เลือกไฟล์ภาพ · สูงสุด 4 ภาพ</span><input type="file" id="garudaUpload" accept="image/png,image/jpeg,image/webp" multiple hidden><button class="secondary-button" id="chooseGaruda">เลือกไฟล์ภาพ</button></div>
+            <div class="asset-grid" id="garudaAssets"></div>
+            <div class="upload-note"><b>ขนาดที่ใช้กับแม่แบบ</b><p>หนังสือภายนอกใช้ความสูงตราครุฑ 3 ซม. และบันทึกข้อความใช้ 1.5 ซม. ตำแหน่งจริงขึ้นกับชนิดแบบพิมพ์</p></div>
+          </div>
+          <div class="content-card settings-card"><div class="card-heading"><div><h3>ค่าการจัดหน้าเริ่มต้น</h3><p>เป็นค่าตั้งต้นของตัวแก้ไข สามารถเปลี่ยนได้รายเอกสาร</p></div><span class="settings-icon">⚙</span></div>
+            <div class="setting-readonly"><span>แบบอักษรเริ่มต้น</span><strong>TH Sarabun PSK</strong></div><div class="setting-readonly"><span>ขนาดอักษรเริ่มต้น</span><strong>16 pt</strong></div><div class="setting-readonly"><span>ขอบซ้าย / ขอบขวา</span><strong>3 ซม. / 2 ซม.</strong></div><div class="setting-readonly"><span>ระยะบรรทัด</span><strong>Single (1 เท่า)</strong></div>
+            <p class="small-help">หากอุปกรณ์ไม่มีฟอนต์ TH Sarabun PSK ผลการแสดงผลอาจใช้ฟอนต์สำรอง ควรติดตั้งฟอนต์ที่หน่วยงานกำหนดและตรวจ PDF ก่อนใช้งานจริง</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="app-footer"><span>E-OFFICE DOCUMENT WORKSPACE</span><span>Frontend prototype · GitHub Pages</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="previewModal" aria-hidden="true">
+    <div class="preview-modal" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+      <div class="modal-header"><div><span class="eyebrow">DOCUMENT PREVIEW</span><h2 id="previewTitle">ตัวอย่างก่อนพิมพ์</h2></div><div class="modal-tools"><button class="secondary-button" id="previewPrint">PDF / พิมพ์</button><button class="close-button" id="closePreview" aria-label="ปิด">×</button></div></div>
+      <div class="preview-body"><div class="preview-paper-host" id="previewPaperHost"></div></div>
+    </div>
+  </div>
+  <div id="printHost"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

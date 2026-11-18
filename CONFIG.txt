@@ -1,0 +1,6 @@
+E-OFFICE SHEETS-ONLY CONFIGURATION
+1. Deploy gas/Code.gs as a Google Apps Script Web App.
+2. Enter the /exec URL in Settings > Google Sheets connection.
+3. Optional API key must match Script Property EO_API_KEY.
+4. No Google Drive is used. Documents, profile and image chunks are stored in Google Sheets.
+5. If GAS URL is blank, browser uses local IndexedDB only.
