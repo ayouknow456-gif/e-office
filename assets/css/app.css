@@ -9,6 +9,97 @@
 @media(max-width:1250px){.composer-workspace{grid-template-columns:190px minmax(370px,1fr)}.quick-panel{grid-column:1/-1;border-left:0;border-top:1px solid #edf0f3;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;align-items:end}.quick-panel .panel-title{grid-column:1/-1;margin-bottom:0}.quick-action{margin-top:0}.privacy-hint{display:none}}
 @media(max-width:900px){.sidebar{width:220px}.main-area{margin-left:220px;width:calc(100% - 220px)}.view{padding:25px 22px}.topbar{padding:0 22px}.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.composer-workspace{grid-template-columns:1fr}.properties-panel{border-right:0;border-bottom:1px solid #edf0f3;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}.properties-panel .panel-title,.field-divider,.panel-tip{grid-column:1/-1}.paper-workspace{min-height:720px}.quick-panel{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.sidebar{transform:translateX(-100%);transition:transform .22s;width:260px;box-shadow:15px 0 35px rgba(0,0,0,.15)}.sidebar.open{transform:translateX(0)}.main-area{margin-left:0;width:100%}.mobile-menu{display:grid!important;place-items:center;width:32px;height:32px;border:1px solid #e0e6ed;border-radius:7px;background:#fff;color:#536a80}.topbar{height:58px;padding:0 14px}.topbar-right{gap:10px}.system-status{display:none}.top-date{padding-left:0;border:0;font-size:9px}.view{padding:22px 13px}.page-heading,.editor-heading{align-items:flex-start;flex-direction:column}.page-heading h1,.editor-heading h1{font-size:22px}.page-heading .primary-button{align-self:stretch}.welcome-banner{padding:23px 20px;min-height:180px}.welcome-banner h2{font-size:20px}.welcome-banner p{max-width:250px}.banner-orbit{position:absolute;right:-50px;opacity:.35}.stats-grid{gap:9px}.stat-card{padding:13px;min-height:111px}.stat-card>span{left:51px;top:19px}.stat-symbol{width:28px;height:28px}.stat-card strong{font-size:22px}.recent-card{padding:15px 12px 5px}.card-heading h3{font-size:13px}.app-footer{padding:15px 14px;gap:8px;font-size:8px}.list-toolbar{flex-direction:column;padding:13px}.search-box{max-width:none}.select-control{height:35px}.editor-actions{width:100%;display:grid;grid-template-columns:1fr 1fr 1fr}.editor-actions button{padding:9px 5px;font-size:10px}.composer-toolbar{gap:5px;padding:8px}.toolbar-divider{margin:0 1px}.toolbar-group select{max-width:112px}.template-group select{max-width:130px}.properties-panel{padding:13px;grid-template-columns:1fr 1fr}.paper-workspace{min-height:550px}.paper-stage{padding:18px 8px 25px;min-height:510px;justify-content:flex-start}.paper-frame{margin:0 auto}.quick-panel{grid-template-columns:1fr 1fr;padding:13px}.quick-action{grid-column:1/-1;grid-template-columns:1fr 1fr}.settings-grid{grid-template-columns:1fr}.garuda-settings{grid-column:auto}.settings-card{padding:16px}.two-fields{grid-template-columns:1fr}.asset-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.garuda-settings .asset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.preview-modal{height:96vh}.modal-backdrop{padding:1vh 1vw}.modal-header{padding:10px 12px;height:63px}.modal-header h2{font-size:14px}.modal-header .secondary-button{padding:7px 9px;font-size:10px}.preview-body{padding:10px 0}.preview-paper-host{justify-content:flex-start;overflow:auto}.preview-paper-host .paper{transform:scale(.68)!important;transform-origin:top left;margin-left:3px}.modal-tools{gap:5px}}
+
+/* =====================================================
+   E-OFFICE SIDEBAR: independent vertical scrolling
+   ===================================================== */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: auto;
+  bottom: 0;
+  left: 0;
+  width: 252px;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+.sidebar > .brand,
+.sidebar > .workspace-label {
+  flex: 0 0 auto;
+}
+
+.sidebar > .nav-list {
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+  align-content: flex-start;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  gap: 5px;
+  padding: 0 3px 10px 0;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(190,210,230,.5) transparent;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.sidebar > .nav-list > .nav-item {
+  flex: 0 0 43px;
+  width: 100%;
+  min-width: 0;
+  height: 43px;
+  white-space: nowrap;
+}
+
+.sidebar > .sidebar-bottom {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: auto;
+}
+
+.sidebar > .nav-list::-webkit-scrollbar { width: 5px; }
+.sidebar > .nav-list::-webkit-scrollbar-track { background: transparent; }
+.sidebar > .nav-list::-webkit-scrollbar-thumb {
+  background: rgba(190,210,230,.5);
+  border-radius: 10px;
+}
+.sidebar > .nav-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(220,235,250,.75);
+}
+
+html, body, .app-shell, .main-area {
+  max-width: 100%;
+}
+body { overflow-x: hidden; }
+
+@media (max-width: 900px) {
+  .sidebar { width: 220px; }
+}
+
+@media (max-width: 650px) {
+  .sidebar {
+    width: 260px;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+  .sidebar > .nav-list {
+    flex: 1 1 0%;
+    min-height: 0;
+    overscroll-behavior: contain;
+  }
+}
+
 #printHost{display:none}
 @media print{
   @page{size:A4;margin:15mm 20mm 20mm 30mm}
@@ -18,115 +109,4 @@
   #printHost #paper{display:block!important;visibility:visible!important;position:static!important;left:auto!important;top:auto!important;width:auto!important;min-height:0!important;height:auto!important;padding:0!important;margin:0!important;box-shadow:none!important;transform:none!important;overflow:visible!important;background:#fff!important;color:#000!important}
   #printHost #paper *{visibility:visible!important}
   #printHost .paper-garuda-wrap{break-inside:avoid}
-  /* =========================================
-   E-OFFICE SIDEBAR SCROLL FIX
-   แก้เมนูเลื่อนไม่ได้ / เมาส์เลื่อนผิดทิศ
-========================================= */
-
-/* ล็อกแถบเมนูให้อยู่ในความสูงหน้าจอ */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-
-  width: 252px;
-  height: 100vh;
-  height: 100dvh;
-
-  display: flex;
-  flex-direction: column;
-
-  overflow: hidden;
-  overscroll-behavior: none;
-}
-
-/* ส่วนหัวและชื่อพื้นที่ไม่ยุบ */
-.sidebar > .brand,
-.sidebar > .workspace-label {
-  flex: 0 0 auto;
-}
-
-/* พื้นที่รายการเมนู */
-.sidebar > .nav-list {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-
-  min-height: 0;
-  width: 100%;
-
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-
-  overscroll-behavior-y: contain;
-  overscroll-behavior-x: none;
-
-  align-content: flex-start;
-  padding: 0 3px 10px 0;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(190,210,230,.45) transparent;
-
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ป้องกันรายการเมนูถูกบีบ */
-.sidebar .nav-item {
-  flex: 0 0 43px;
-  width: 100%;
-  min-width: 0;
-  white-space: nowrap;
-}
-
-/* ส่วนล่างไม่ให้ถูกเลื่อนหาย */
-.sidebar > .sidebar-bottom {
-  flex: 0 0 auto;
-  margin-top: auto;
-  width: 100%;
-  background: #142c43;
-}
-
-/* แถบเลื่อนสำหรับ Chrome / Edge */
-.sidebar > .nav-list::-webkit-scrollbar {
-  width: 5px;
-}
-
-.sidebar > .nav-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar > .nav-list::-webkit-scrollbar-thumb {
-  background: rgba(190,210,230,.45);
-  border-radius: 10px;
-}
-
-.sidebar > .nav-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(220,235,250,.7);
-}
-
-/* ป้องกันเนื้อหาหลักเลื่อนแนวนอน */
-html,
-body,
-.app-shell,
-.main-area {
-  max-width: 100%;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-/* มือถือ */
-@media (max-width: 768px) {
-  .sidebar {
-    height: 100vh;
-    height: 100dvh;
-    max-height: 100dvh;
-  }
-
-  .sidebar > .nav-list {
-    touch-action: pan-y;
-    overscroll-behavior: contain;
-  }
 }
