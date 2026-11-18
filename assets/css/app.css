@@ -18,34 +18,115 @@
   #printHost #paper{display:block!important;visibility:visible!important;position:static!important;left:auto!important;top:auto!important;width:auto!important;min-height:0!important;height:auto!important;padding:0!important;margin:0!important;box-shadow:none!important;transform:none!important;overflow:visible!important;background:#fff!important;color:#000!important}
   #printHost #paper *{visibility:visible!important}
   #printHost .paper-garuda-wrap{break-inside:avoid}
-  /* FIX: Sidebar Navigation Scroll */
+  /* =========================================
+   E-OFFICE SIDEBAR SCROLL FIX
+   แก้เมนูเลื่อนไม่ได้ / เมาส์เลื่อนผิดทิศ
+========================================= */
+
+/* ล็อกแถบเมนูให้อยู่ในความสูงหน้าจอ */
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+
+  width: 252px;
   height: 100vh;
   height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
-.nav-list {
+/* ส่วนหัวและชื่อพื้นที่ไม่ยุบ */
+.sidebar > .brand,
+.sidebar > .workspace-label {
+  flex: 0 0 auto;
+}
+
+/* พื้นที่รายการเมนู */
+.sidebar > .nav-list {
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
+
   min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  align-content: start;
-  padding-right: 3px;
-  -webkit-overflow-scrolling: touch;
+  width: 100%;
+
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: none;
+
+  align-content: flex-start;
+  padding: 0 3px 10px 0;
+
   scrollbar-width: thin;
+  scrollbar-color: rgba(190,210,230,.45) transparent;
+
+  -webkit-overflow-scrolling: touch;
 }
 
-.nav-list::-webkit-scrollbar {
+/* ป้องกันรายการเมนูถูกบีบ */
+.sidebar .nav-item {
+  flex: 0 0 43px;
+  width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* ส่วนล่างไม่ให้ถูกเลื่อนหาย */
+.sidebar > .sidebar-bottom {
+  flex: 0 0 auto;
+  margin-top: auto;
+  width: 100%;
+  background: #142c43;
+}
+
+/* แถบเลื่อนสำหรับ Chrome / Edge */
+.sidebar > .nav-list::-webkit-scrollbar {
   width: 5px;
 }
 
-.nav-list::-webkit-scrollbar-thumb {
-  background: rgba(190, 210, 230, .45);
+.sidebar > .nav-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar > .nav-list::-webkit-scrollbar-thumb {
+  background: rgba(190,210,230,.45);
   border-radius: 10px;
 }
-  #printHost .document-body{min-height:0!important;outline:0!important}
-  #printHost .document-body p{orphans:2;widows:2}
-  #printHost .paper-footer{break-inside:avoid}
+
+.sidebar > .nav-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(220,235,250,.7);
+}
+
+/* ป้องกันเนื้อหาหลักเลื่อนแนวนอน */
+html,
+body,
+.app-shell,
+.main-area {
+  max-width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* มือถือ */
+@media (max-width: 768px) {
+  .sidebar {
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  .sidebar > .nav-list {
+    touch-action: pan-y;
+    overscroll-behavior: contain;
+  }
 }
