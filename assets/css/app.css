@@ -18,6 +18,33 @@
   #printHost #paper{display:block!important;visibility:visible!important;position:static!important;left:auto!important;top:auto!important;width:auto!important;min-height:0!important;height:auto!important;padding:0!important;margin:0!important;box-shadow:none!important;transform:none!important;overflow:visible!important;background:#fff!important;color:#000!important}
   #printHost #paper *{visibility:visible!important}
   #printHost .paper-garuda-wrap{break-inside:avoid}
+  /* FIX: Sidebar Navigation Scroll */
+.sidebar {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.nav-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  align-content: start;
+  padding-right: 3px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.nav-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.nav-list::-webkit-scrollbar-thumb {
+  background: rgba(190, 210, 230, .45);
+  border-radius: 10px;
+}
   #printHost .document-body{min-height:0!important;outline:0!important}
   #printHost .document-body p{orphans:2;widows:2}
   #printHost .paper-footer{break-inside:avoid}
